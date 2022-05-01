@@ -5,31 +5,35 @@
 #include <vector>
 #include "particleSystem.h"
 
-class TimeStepper
-{
+class TimeStepper {
 public:
-	virtual void takeStep(ParticleSystem* particleSystem,float stepSize)=0;
+    virtual void takeStep(ParticleSystem *particleSystem, float stepSize) = 0;
 
 };
 
 //IMPLEMENT YOUR TIMESTEPPERS
 
-class ForwardEuler:public TimeStepper
-{
-  void takeStep(ParticleSystem* particleSystem, float stepSize);
+class ForwardEuler : public TimeStepper {
+    void takeStep(ParticleSystem *particleSystem, float stepSize);
 };
 
-class Trapzoidal:public TimeStepper
-{
-  void takeStep(ParticleSystem* particleSystem, float stepSize);
+class Trapzoidal : public TimeStepper {
+    void takeStep(ParticleSystem *particleSystem, float stepSize);
 };
 
 /////////////////////////
 
 //Provided
-class RK4:public TimeStepper
-{
-  void takeStep(ParticleSystem* particleSystem, float stepSize);
+class RK4 : public TimeStepper {
+    void takeStep(ParticleSystem *particleSystem, float stepSize);
+};
+
+class ode45 : public TimeStepper {
+    void takeStep(ParticleSystem *particleSystem, float stepSize);
+
+private:
+    float step_size;
+    float tolerance;
 };
 
 #endif

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "TimeStepper.hpp"
 
 ///TODO: implement Explicit Euler time integrator here
@@ -32,8 +33,7 @@ void Trapzoidal::takeStep(ParticleSystem *particleSystem, float stepSize) {
     particleSystem->setState(FVal_1);
 }
 
-///TODO: implement RK4 here
-void RK4::takeStep(ParticleSystem *particleSystem, float stepSize) {
+vector<Vector3f> RK4_step(ParticleSystem *particleSystem, float stepSize) {
     vector<Vector3f> x_current = particleSystem->getState();
     vector<Vector3f> state_f1 = particleSystem->evalF(x_current);
     vector<Vector3f> state_f2 = x_current;
@@ -62,5 +62,41 @@ void RK4::takeStep(ParticleSystem *particleSystem, float stepSize) {
         k4[i] = stepSize * FVal4[i];
         x_current[i] = x_current[i] + (1.0 / 6.0) * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
     }
+    return x_current;
+}
+
+///TODO: implement RK4 here
+void RK4::takeStep(ParticleSystem *particleSystem, float stepSize) {
+    vector<Vector3f> x_current = RK4_step(particleSystem, stepSize);
     particleSystem->setState(x_current);
+}
+
+//float Vector3f::abs() const
+//{
+//    return sqrt( m_elements[0] * m_elements[0] + m_elements[1] * m_elements[1] + m_elements[2] * m_elements[2] );
+//}
+void ode45::takeStep(ParticleSystem *particleSystem, float stepSize) {
+    step_size = stepSize;
+    float safety_factor = 0.9;
+    tolerance = 0.01;
+    float error = 10000.0;
+    vector<Vector3f> x1;
+    x1 = RK4_step(particleSystem, step_size);
+    while (error > tolerance) {
+        x1 = RK4_step(particleSystem, step_size);
+        vector<Vector3f> x2 = RK4_step(particleSystem, step_size / 2);
+        error = 0;
+        for (int j = 0; j < x1.size(); j++) {
+            error += sqrt((
+                                  x1[j].x() - x2[j].x()) * (x1[j].x() - x2[j].x()) +
+                          (x1[j].y() - x2[j].y()) * (x1[j].y() - x2[j].y()) +
+                          (x1[j].z() - x2[j].z()) * (x1[j].z() - x2[j].z()));
+        }
+        error /= x1.size();
+//        error = tolerance;
+        float new_time_step = safety_factor * step_size * sqrt(sqrt(tolerance / error));
+//        cout << "ode error: " << error << " old time: " << step_size << " new step: " << new_time_step << endl;
+        step_size = new_time_step;
+    }
+    particleSystem->setState(x1);
 }

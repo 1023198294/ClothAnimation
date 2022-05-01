@@ -42,8 +42,10 @@ namespace {
         srand(time(NULL));
         system = new ClothSystem(15);
 //        system = new SimpleChain();
-        timeStepper = new RK4();
+//        timeStepper = new RK4();
+        timeStepper = new ode45();
     }
+
 
     // Take a step forward for the particle shower
     ///TODO: Optional. modify this function to display various particle systems

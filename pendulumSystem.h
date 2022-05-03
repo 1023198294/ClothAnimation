@@ -18,10 +18,10 @@ class PendulumSystem: public ParticleSystem
 public:
     PendulumSystem(int numParticles);
 
-    virtual vector<Vector3f> evalF(vector<Vector3f> state);
+    virtual vector<Vector3f_> evalF(vector<Vector3f_> state);
 
     //Construct Specific Pendulum
-    void initPendulum(vector<Vector4f> p, vector<Vector4f> s, vector<Vector3f> f);
+    void initPendulum(vector<Vector4f_> p, vector<Vector4f_> s, vector<Vector3f_> f);
 
     virtual void draw();
 
@@ -48,12 +48,12 @@ protected:
     bool structSprings_ON;
 
     //Spring ( from p0, to p1, restLength, springConstant)
-    vector<Vector4f> springs;
+    vector<Vector4f_> springs;
 
     //Particle ( Vector3f pos, bool fixed)
-    vector<Vector4f> particles;
+    vector<Vector4f_> particles;
 
-    vector<Vector3f> faces;
+    vector<Vector3f_> faces;
 
 
 };

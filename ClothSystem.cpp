@@ -17,9 +17,9 @@ ClothSystem::ClothSystem(int C_SIZE) : PendulumSystem(C_SIZE * C_SIZE) {
         vector<vector<int> > temp;
         for (int col = 0; col < C_SIZE; col++) {
             if ((row == 0 && col == 0) || (row == 0 && col == C_SIZE - 1)) {    //endpoints are fixed
-                particles.push_back(Vector4f(col * distance, 0.0f, row * distance, 1.0f));
+                particles.push_back(Vector4f_(col * distance, 0.0f, row * distance, 1.0f));
             } else {
-                particles.push_back(Vector4f(col * distance, 0.0f, row * distance, 0.0f));
+                particles.push_back(Vector4f_(col * distance, 0.0f, row * distance, 0.0f));
             }
             //Structural Springs
             //======================================================
@@ -27,13 +27,13 @@ ClothSystem::ClothSystem(int C_SIZE) : PendulumSystem(C_SIZE * C_SIZE) {
             if (row < C_SIZE - 1) {
                 float p0 = (float) ((row) * C_SIZE + (col));
                 float p1 = (float) ((row + 1) * C_SIZE + (col));
-                springs.push_back(Vector4f(p0, p1, restL, springC));
+                springs.push_back(Vector4f_(p0, p1, restL, springC));
             }
             //Link(row,col) to Link(row,col+1)
             if (col < C_SIZE - 1) {
                 float p0 = (float) ((row) * C_SIZE + (col));
                 float p1 = (float) ((row) * C_SIZE + (col + 1));
-                springs.push_back(Vector4f(p0, p1, restL, springC));
+                springs.push_back(Vector4f_(p0, p1, restL, springC));
             }
 
             //Shear Springs
@@ -42,13 +42,13 @@ ClothSystem::ClothSystem(int C_SIZE) : PendulumSystem(C_SIZE * C_SIZE) {
             if (row < C_SIZE - 1 && col < C_SIZE - 1) {
                 float p0 = (float) ((row) * C_SIZE + (col));
                 float p1 = (float) ((row + 1) * C_SIZE + (col + 1));
-                springs.push_back(Vector4f(p0, p1, restL * sqrt(2), springC));
+                springs.push_back(Vector4f_(p0, p1, restL * sqrt(2), springC));
             }
             //Link(row,col) to Link(row+1,col-1)
             if (row < C_SIZE - 1 && col > 0) {
                 float p0 = (float) ((row) * C_SIZE + (col));
                 float p1 = (float) ((row + 1) * C_SIZE + (col - 1));
-                springs.push_back(Vector4f(p0, p1, restL * sqrt(2), springC));
+                springs.push_back(Vector4f_(p0, p1, restL * sqrt(2), springC));
             }
 
             //Flex Springs
@@ -57,13 +57,13 @@ ClothSystem::ClothSystem(int C_SIZE) : PendulumSystem(C_SIZE * C_SIZE) {
             if (row < C_SIZE - 2) {
                 float p0 = (float) ((row) * C_SIZE + (col));
                 float p1 = (float) ((row + 2) * C_SIZE + (col));
-                springs.push_back(Vector4f(p0, p1, restL * 2, springC));
+                springs.push_back(Vector4f_(p0, p1, restL * 2, springC));
             }
             //Link(row,col) to Link(row,col+2)
             if (col < C_SIZE - 2) {
                 float p0 = (float) ((row) * C_SIZE + (col));
                 float p1 = (float) ((row) * C_SIZE + (col + 2));
-                springs.push_back(Vector4f(p0, p1, restL * 2, springC));
+                springs.push_back(Vector4f_(p0, p1, restL * 2, springC));
             }
 
             //Faces
@@ -71,13 +71,13 @@ ClothSystem::ClothSystem(int C_SIZE) : PendulumSystem(C_SIZE * C_SIZE) {
             //======================================================
             if (row < C_SIZE - 1 && col < C_SIZE - 1) {
                 //Front - normals pointing forward
-                int face1_idx = faces.size();
-                Vector3f face1 = Vector3f((float) ((row + 1) * C_SIZE + (col + 1)),
+                //int face1_idx = faces.size();
+                Vector3f_ face1 = Vector3f_((float) ((row + 1) * C_SIZE + (col + 1)),
                                           (float) ((row) * C_SIZE + (col + 1)),
                                           (float) ((row + 1) * C_SIZE + (col)));
                 faces.push_back(face1);
-                int face2_idx = face1_idx + 1;
-                Vector3f face2 = Vector3f((float) ((row) * C_SIZE + (col + 1)),
+                //int face2_idx = face1_idx + 1;
+                Vector3f_ face2 = Vector3f_((float) ((row) * C_SIZE + (col + 1)),
                                           (float) ((row) * C_SIZE + (col)),
                                           (float) ((row + 1) * C_SIZE + (col)));
                 faces.push_back(face2);
@@ -101,7 +101,7 @@ void ClothSystem::draw() {
     if (this->display_spring) {
         if (particles_ON) {
             for (int i = 0; i < m_numParticles; i++) {
-                Vector3f pos = getState()[2 * i];//  position of particle i.
+                Vector3f_ pos = getState()[2 * i];//  position of particle i.
                 glPushMatrix();
                 glTranslatef(pos[0], pos[1], pos[2]);
                 glutSolidSphere(0.075f, 10.0f, 10.0f);
@@ -111,8 +111,8 @@ void ClothSystem::draw() {
 
         for (unsigned int a = 0; a < springs.size(); a++) {
             if (!structSprings_ON) {
-                Vector3f p0 = getState()[2 * (int) springs[a][0]];
-                Vector3f p1 = getState()[2 * (int) springs[a][1]];
+                Vector3f_ p0 = getState()[2 * (int) springs[a][0]];
+                Vector3f_ p1 = getState()[2 * (int) springs[a][1]];
                 glLineWidth(2.0f);
                 glBegin(GL_LINES);
                 glVertex3f(p0.x(), p0.y(), p0.z());
@@ -121,8 +121,8 @@ void ClothSystem::draw() {
             } else {
                 float restL = 0.20f;
                 if (springs[a][2] == restL) {
-                    Vector3f p0 = getState()[2 * (int) springs[a][0]];
-                    Vector3f p1 = getState()[2 * (int) springs[a][1]];
+                    Vector3f_ p0 = getState()[2 * (int) springs[a][0]];
+                    Vector3f_ p1 = getState()[2 * (int) springs[a][1]];
                     glLineWidth(2.0f);
                     glBegin(GL_LINES);
                     glVertex3f(p0.x(), p0.y(), p0.z());
@@ -141,7 +141,7 @@ void ClothSystem::draw() {
     glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
     glColor3f(1.0f, 1.0f, 0.0f);
-    Vector3f locBall = Vector3f(1.0f + xTrans, -3.5f + yTrans, 0.0f);
+    Vector3f_ locBall = Vector3f_(1.0f + xTrans, -3.5f + yTrans, 0.0f);
     float radBall = 1.0f;
     float epsilon = 0.125f;
     glPushMatrix();
@@ -158,18 +158,18 @@ void ClothSystem::draw() {
 }
 
 void ClothSystem::drawClothes() {
-    vector<Vector3f> state = getState();
-    vector<Vector3f> norms(C_SIZE * C_SIZE);
+    vector<Vector3f_> state = getState();
+    vector<Vector3f_> norms(C_SIZE * C_SIZE);
     for (int i = 0; i < C_SIZE - 1; i++) {
         for (int j = 0; j < C_SIZE - 1; j++) {
             int index = i * C_SIZE + j;
-            Vector3f v1 = state[2 * index];
-            Vector3f v2 = state[2 * (index + 1)];
-            Vector3f v3 = state[2 * (index + 1 + C_SIZE)];
-            Vector3f v4 = state[2 * (index + C_SIZE)];
+            Vector3f_ v1 = state[2 * index];
+            Vector3f_ v2 = state[2 * (index + 1)];
+            Vector3f_ v3 = state[2 * (index + 1 + C_SIZE)];
+            Vector3f_ v4 = state[2 * (index + C_SIZE)];
 
-            Vector3f norm1 = Vector3f::cross(v3 - v1, v2 - v3).normalized();
-            Vector3f norm2 = Vector3f::cross(v4 - v1, v3 - v4).normalized();
+            Vector3f_ norm1 = Vector3f_::cross(v3 - v1, v2 - v3).normalized();
+            Vector3f_ norm2 = Vector3f_::cross(v4 - v1, v3 - v4).normalized();
 
             norms[i * C_SIZE + j] = norms[i * C_SIZE + j] + norm1 + norm2;
             norms[i * C_SIZE + j + 1] = norms[i * C_SIZE + j] + norm1;
@@ -177,21 +177,21 @@ void ClothSystem::drawClothes() {
             norms[(i + 1) * C_SIZE + j + 1] = norms[i * C_SIZE + j] + norm1 + norm2;
         }
     }
-    for (int i = 0; i < norms.size(); i++) {
+    for (unsigned int i = 0; i < norms.size(); i++) {
         norms[i] = norms[i].normalized();
     }
 
     for (int i = 0; i < C_SIZE - 1; i++) {
         for (int j = 0; j < C_SIZE - 1; j++) {
             int index = i * C_SIZE + j;
-            Vector3f v1 = state[2 * index];
-            Vector3f v2 = state[2 * (index + 1)];
-            Vector3f v3 = state[2 * (index + 1 + C_SIZE)];
-            Vector3f v4 = state[2 * (index + C_SIZE)];
-            Vector3f n1 = norms[index];
-            Vector3f n2 = norms[index + 1];
-            Vector3f n3 = norms[index + 1 + C_SIZE];
-            Vector3f n4 = norms[index + C_SIZE];
+            Vector3f_ v1 = state[2 * index];
+            Vector3f_ v2 = state[2 * (index + 1)];
+            Vector3f_ v3 = state[2 * (index + 1 + C_SIZE)];
+            Vector3f_ v4 = state[2 * (index + C_SIZE)];
+            Vector3f_ n1 = norms[index];
+            Vector3f_ n2 = norms[index + 1];
+            Vector3f_ n3 = norms[index + 1 + C_SIZE];
+            Vector3f_ n4 = norms[index + C_SIZE];
             glBegin(GL_TRIANGLES);
 
             glNormal3f(n1[0], n1[1], n1[2]);

@@ -19,13 +19,13 @@ public:
     int m_numParticles;
 
     // for a given state, evaluate derivative f(X,t)
-    virtual vector<Vector3f> evalF(vector<Vector3f> state) = 0;
+    virtual vector<Vector3f_> evalF(vector<Vector3f_> state) = 0;
 
     // getter method for the system's state
-    vector<Vector3f> getState() { return m_vVecState; };
+    vector<Vector3f_> getState() { return m_vVecState; };
 
     // setter method for the system's state
-    void setState(const vector<Vector3f> &newState) { m_vVecState = newState; };
+    void setState(const vector<Vector3f_> &newState) { m_vVecState = newState; };
     void switch_draw_mode();
     void switch_move();
     void switch_wind();
@@ -34,7 +34,7 @@ public:
 
 protected:
 
-    vector<Vector3f> m_vVecState;
+    vector<Vector3f_> m_vVecState;
 
 };
 

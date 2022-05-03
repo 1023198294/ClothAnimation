@@ -2,21 +2,21 @@
 #include <cmath>
 #include <cstdio>
 
-#include "Quat4f.h"
-#include "Vector3f.h"
-#include "Vector4f.h"
+#include "Quat4f_.h"
+#include "Vector3f_.h"
+#include "Vector4f_.h"
 
 //////////////////////////////////////////////////////////////////////////
 // Public
 //////////////////////////////////////////////////////////////////////////
 
 // static
-const Quat4f Quat4f::ZERO = Quat4f( 0, 0, 0, 0 );
+const Quat4f_ Quat4f_::ZERO = Quat4f_( 0, 0, 0, 0 );
 
 // static
-const Quat4f Quat4f::IDENTITY = Quat4f( 1, 0, 0, 0 );
+const Quat4f_ Quat4f_::IDENTITY = Quat4f_( 1, 0, 0, 0 );
 
-Quat4f::Quat4f()
+Quat4f_::Quat4f_()
 {
 	m_elements[ 0 ] = 0;
 	m_elements[ 1 ] = 0;
@@ -24,7 +24,7 @@ Quat4f::Quat4f()
 	m_elements[ 3 ] = 0;
 }
 
-Quat4f::Quat4f( float w, float x, float y, float z )
+Quat4f_::Quat4f_( float w, float x, float y, float z )
 {
 	m_elements[ 0 ] = w;
 	m_elements[ 1 ] = x;
@@ -32,7 +32,7 @@ Quat4f::Quat4f( float w, float x, float y, float z )
 	m_elements[ 3 ] = z;
 }
 
-Quat4f::Quat4f( const Quat4f& rq )
+Quat4f_::Quat4f_( const Quat4f_& rq )
 {
 	m_elements[ 0 ] = rq.m_elements[ 0 ];
 	m_elements[ 1 ] = rq.m_elements[ 1 ];
@@ -40,7 +40,7 @@ Quat4f::Quat4f( const Quat4f& rq )
 	m_elements[ 3 ] = rq.m_elements[ 3 ];
 }
 
-Quat4f& Quat4f::operator = ( const Quat4f& rq )
+Quat4f_& Quat4f_::operator = ( const Quat4f_& rq )
 {
 	if( this != ( &rq ) )
 	{
@@ -52,7 +52,7 @@ Quat4f& Quat4f::operator = ( const Quat4f& rq )
     return( *this );
 }
 
-Quat4f::Quat4f( const Vector3f& v )
+Quat4f_::Quat4f_( const Vector3f_& v )
 {
 	m_elements[ 0 ] = 0;
 	m_elements[ 1 ] = v[ 0 ];
@@ -60,7 +60,7 @@ Quat4f::Quat4f( const Vector3f& v )
 	m_elements[ 3 ] = v[ 2 ];
 }
 
-Quat4f::Quat4f( const Vector4f& v )
+Quat4f_::Quat4f_( const Vector4f_& v )
 {
 	m_elements[ 0 ] = v[ 0 ];
 	m_elements[ 1 ] = v[ 1 ];
@@ -68,39 +68,39 @@ Quat4f::Quat4f( const Vector4f& v )
 	m_elements[ 3 ] = v[ 3 ];
 }
 
-const float& Quat4f::operator [] ( int i ) const
+const float& Quat4f_::operator [] ( int i ) const
 {
 	return m_elements[ i ];
 }
 
-float& Quat4f::operator [] ( int i )
+float& Quat4f_::operator [] ( int i )
 {
 	return m_elements[ i ];
 }
 
-float Quat4f::w() const
+float Quat4f_::w() const
 {
 	return m_elements[ 0 ];
 }
 
-float Quat4f::x() const
+float Quat4f_::x() const
 {
 	return m_elements[ 1 ];
 }
 
-float Quat4f::y() const
+float Quat4f_::y() const
 {
 	return m_elements[ 2 ];
 }
 
-float Quat4f::z() const
+float Quat4f_::z() const
 {
 	return m_elements[ 3 ];
 }
 
-Vector3f Quat4f::xyz() const
+Vector3f_ Quat4f_::xyz() const
 {
-	return Vector3f
+	return Vector3f_
 	(
 		m_elements[ 1 ],
 		m_elements[ 2 ],
@@ -108,9 +108,9 @@ Vector3f Quat4f::xyz() const
 	);
 }
 
-Vector4f Quat4f::wxyz() const
+Vector4f_ Quat4f_::wxyz() const
 {
-	return Vector4f
+	return Vector4f_
 	(
 		m_elements[ 0 ],
 		m_elements[ 1 ],
@@ -119,12 +119,12 @@ Vector4f Quat4f::wxyz() const
 	);
 }
 
-float Quat4f::abs() const
+float Quat4f_::abs() const
 {
 	return sqrt( absSquared() );	
 }
 
-float Quat4f::absSquared() const
+float Quat4f_::absSquared() const
 {
 	return
 	(
@@ -135,7 +135,7 @@ float Quat4f::absSquared() const
 	);
 }
 
-void Quat4f::normalize()
+void Quat4f_::normalize()
 {
 	float reciprocalAbs = 1.f / abs();
 
@@ -145,23 +145,23 @@ void Quat4f::normalize()
 	m_elements[ 3 ] *= reciprocalAbs;
 }
 
-Quat4f Quat4f::normalized() const
+Quat4f_ Quat4f_::normalized() const
 {
-	Quat4f q( *this );
+	Quat4f_ q( *this );
 	q.normalize();
 	return q;
 }
 
-void Quat4f::conjugate()
+void Quat4f_::conjugate()
 {
 	m_elements[ 1 ] = -m_elements[ 1 ];
 	m_elements[ 2 ] = -m_elements[ 2 ];
 	m_elements[ 3 ] = -m_elements[ 3 ];
 }
 
-Quat4f Quat4f::conjugated() const
+Quat4f_ Quat4f_::conjugated() const
 {
-	return Quat4f
+	return Quat4f_
 	(
 		 m_elements[ 0 ],
 		-m_elements[ 1 ],
@@ -170,9 +170,9 @@ Quat4f Quat4f::conjugated() const
 	);
 }
 
-void Quat4f::invert()
+void Quat4f_::invert()
 {
-	Quat4f inverse = conjugated() * ( 1.0f / absSquared() );
+	Quat4f_ inverse = conjugated() * ( 1.0f / absSquared() );
 
 	m_elements[ 0 ] = inverse.m_elements[ 0 ];
 	m_elements[ 1 ] = inverse.m_elements[ 1 ];
@@ -180,13 +180,13 @@ void Quat4f::invert()
 	m_elements[ 3 ] = inverse.m_elements[ 3 ];
 }
 
-Quat4f Quat4f::inverse() const
+Quat4f_ Quat4f_::inverse() const
 {
 	return conjugated() * ( 1.0f / absSquared() );
 }
 
 
-Quat4f Quat4f::log() const
+Quat4f_ Quat4f_::log() const
 {
 	float len =
 		sqrt
@@ -198,16 +198,16 @@ Quat4f Quat4f::log() const
 
 	if( len < 1e-6 )
 	{
-		return Quat4f( 0, m_elements[ 1 ], m_elements[ 2 ], m_elements[ 3 ] );
+		return Quat4f_( 0, m_elements[ 1 ], m_elements[ 2 ], m_elements[ 3 ] );
 	}
 	else
 	{
 		float coeff = acos( m_elements[ 0 ] ) / len;
-		return Quat4f( 0, m_elements[ 1 ] * coeff, m_elements[ 2 ] * coeff, m_elements[ 3 ] * coeff );
+		return Quat4f_( 0, m_elements[ 1 ] * coeff, m_elements[ 2 ] * coeff, m_elements[ 3 ] * coeff );
 	}
 }
 
-Quat4f Quat4f::exp() const
+Quat4f_ Quat4f_::exp() const
 {
 	float theta =
 		sqrt
@@ -219,23 +219,23 @@ Quat4f Quat4f::exp() const
 
 	if( theta < 1e-6 )
 	{
-		return Quat4f( cos( theta ), m_elements[ 1 ], m_elements[ 2 ], m_elements[ 3 ] );
+		return Quat4f_( cos( theta ), m_elements[ 1 ], m_elements[ 2 ], m_elements[ 3 ] );
 	}
 	else
 	{
 		float coeff = sin( theta ) / theta;
-		return Quat4f( cos( theta ), m_elements[ 1 ] * coeff, m_elements[ 2 ] * coeff, m_elements[ 3 ] * coeff );		
+		return Quat4f_( cos( theta ), m_elements[ 1 ] * coeff, m_elements[ 2 ] * coeff, m_elements[ 3 ] * coeff );
 	}
 }
 
-Vector3f Quat4f::getAxisAngle( float* radiansOut )
+Vector3f_ Quat4f_::getAxisAngle( float* radiansOut )
 {
 	float theta = acos( w() ) * 2;
 	float vectorNorm = sqrt( x() * x() + y() * y() + z() * z() );
 	float reciprocalVectorNorm = 1.f / vectorNorm;
 
 	*radiansOut = theta;
-	return Vector3f
+	return Vector3f_
 	(
 		x() * reciprocalVectorNorm,
 		y() * reciprocalVectorNorm,
@@ -243,7 +243,7 @@ Vector3f Quat4f::getAxisAngle( float* radiansOut )
 	);
 }
 
-void Quat4f::setAxisAngle( float radians, const Vector3f& axis )
+void Quat4f_::setAxisAngle( float radians, const Vector3f_& axis )
 {
 	m_elements[ 0 ] = cos( radians / 2 );
 
@@ -256,14 +256,14 @@ void Quat4f::setAxisAngle( float radians, const Vector3f& axis )
 	m_elements[ 3 ] = axis.z() * sinHalfTheta * reciprocalVectorNorm;
 }
 
-void Quat4f::print()
+void Quat4f_::print()
 {
 	printf( "< %.4f + %.4f i + %.4f j + %.4f k >\n",
 		m_elements[ 0 ], m_elements[ 1 ], m_elements[ 2 ], m_elements[ 3 ] );
 }
 
 // static
-float Quat4f::dot( const Quat4f& q0, const Quat4f& q1 )
+float Quat4f_::dot( const Quat4f_& q0, const Quat4f_& q1 )
 {
 	return
 	(
@@ -275,15 +275,15 @@ float Quat4f::dot( const Quat4f& q0, const Quat4f& q1 )
 }
 
 // static
-Quat4f Quat4f::lerp( const Quat4f& q0, const Quat4f& q1, float alpha )
+Quat4f_ Quat4f_::lerp( const Quat4f_& q0, const Quat4f_& q1, float alpha )
 {
 	return( ( q0 + alpha * ( q1 - q0 ) ).normalized() );
 }
 
 // static
-Quat4f Quat4f::slerp( const Quat4f& a, const Quat4f& b, float t, bool allowFlip )
+Quat4f_ Quat4f_::slerp( const Quat4f_& a, const Quat4f_& b, float t, bool allowFlip )
 {
-	float cosAngle = Quat4f::dot( a, b );
+	float cosAngle = Quat4f_::dot( a, b );
 
 	float c1;
 	float c2;
@@ -309,19 +309,19 @@ Quat4f Quat4f::slerp( const Quat4f& a, const Quat4f& b, float t, bool allowFlip 
 		c1 = -c1;
 	}
 
-	return Quat4f( c1 * a[ 0 ] + c2 * b[ 0 ], c1 * a[ 1 ] + c2 * b[ 1 ], c1 * a[ 2 ] + c2 * b[ 2 ], c1 * a[ 3 ] + c2 * b[ 3 ] );
+	return Quat4f_( c1 * a[ 0 ] + c2 * b[ 0 ], c1 * a[ 1 ] + c2 * b[ 1 ], c1 * a[ 2 ] + c2 * b[ 2 ], c1 * a[ 3 ] + c2 * b[ 3 ] );
 }
 
 // static
-Quat4f Quat4f::squad( const Quat4f& a, const Quat4f& tanA, const Quat4f& tanB, const Quat4f& b, float t )
+Quat4f_ Quat4f_::squad( const Quat4f_& a, const Quat4f_& tanA, const Quat4f_& tanB, const Quat4f_& b, float t )
 {
-	Quat4f ab = Quat4f::slerp( a, b, t );
-	Quat4f tangent = Quat4f::slerp( tanA, tanB, t, false );
-	return Quat4f::slerp( ab, tangent, 2.0f * t * ( 1.0f - t ), false );
+	Quat4f_ ab = Quat4f_::slerp( a, b, t );
+	Quat4f_ tangent = Quat4f_::slerp( tanA, tanB, t, false );
+	return Quat4f_::slerp( ab, tangent, 2.0f * t * ( 1.0f - t ), false );
 }
 
 // static
-Quat4f Quat4f::cubicInterpolate( const Quat4f& q0, const Quat4f& q1, const Quat4f& q2, const Quat4f& q3, float t )
+Quat4f_ Quat4f_::cubicInterpolate( const Quat4f_& q0, const Quat4f_& q1, const Quat4f_& q2, const Quat4f_& q3, float t )
 {
 	// geometric construction:
 	//            t
@@ -329,33 +329,33 @@ Quat4f Quat4f::cubicInterpolate( const Quat4f& q0, const Quat4f& q1, const Quat4
 	// t+1        t	        t-1
 
 	// bottom level
-	Quat4f q0q1 = Quat4f::slerp( q0, q1, t + 1 );
-	Quat4f q1q2 = Quat4f::slerp( q1, q2, t );
-	Quat4f q2q3 = Quat4f::slerp( q2, q3, t - 1 );
+	Quat4f_ q0q1 = Quat4f_::slerp( q0, q1, t + 1 );
+	Quat4f_ q1q2 = Quat4f_::slerp( q1, q2, t );
+	Quat4f_ q2q3 = Quat4f_::slerp( q2, q3, t - 1 );
 
 	// middle level
-	Quat4f q0q1_q1q2 = Quat4f::slerp( q0q1, q1q2, 0.5f * ( t + 1 ) );
-	Quat4f q1q2_q2q3 = Quat4f::slerp( q1q2, q2q3, 0.5f * t );
+	Quat4f_ q0q1_q1q2 = Quat4f_::slerp( q0q1, q1q2, 0.5f * ( t + 1 ) );
+	Quat4f_ q1q2_q2q3 = Quat4f_::slerp( q1q2, q2q3, 0.5f * t );
 
 	// top level
-	return Quat4f::slerp( q0q1_q1q2, q1q2_q2q3, t );
+	return Quat4f_::slerp( q0q1_q1q2, q1q2_q2q3, t );
 }
 
 // static
-Quat4f Quat4f::logDifference( const Quat4f& a, const Quat4f& b )
+Quat4f_ Quat4f_::logDifference( const Quat4f_& a, const Quat4f_& b )
 {
-	Quat4f diff = a.inverse() * b;
+	Quat4f_ diff = a.inverse() * b;
 	diff.normalize();
 	return diff.log();
 }
 
 // static
-Quat4f Quat4f::squadTangent( const Quat4f& before, const Quat4f& center, const Quat4f& after )
+Quat4f_ Quat4f_::squadTangent( const Quat4f_& before, const Quat4f_& center, const Quat4f_& after )
 {
-	Quat4f l1 = Quat4f::logDifference( center, before );
-	Quat4f l2 = Quat4f::logDifference( center, after );
+	Quat4f_ l1 = Quat4f_::logDifference( center, before );
+	Quat4f_ l2 = Quat4f_::logDifference( center, after );
 	
-	Quat4f e;
+	Quat4f_ e;
 	for( int i = 0; i < 4; ++i )
 	{
 		e[ i ] = -0.25f * ( l1[ i ] + l2[ i ] );
@@ -366,7 +366,7 @@ Quat4f Quat4f::squadTangent( const Quat4f& before, const Quat4f& center, const Q
 }
 
 // static
-Quat4f Quat4f::fromRotationMatrix( const Matrix3f& m )
+Quat4f_ Quat4f_::fromRotationMatrix( const Matrix3f_& m )
 {
 	float x;
 	float y;
@@ -414,25 +414,25 @@ Quat4f Quat4f::fromRotationMatrix( const Matrix3f& m )
 		}
 	}
 
-	Quat4f q( w, x, y, z );
+	Quat4f_ q( w, x, y, z );
 	return q.normalized();
 }
 
 // static
-Quat4f Quat4f::fromRotatedBasis( const Vector3f& x, const Vector3f& y, const Vector3f& z )
+Quat4f_ Quat4f_::fromRotatedBasis( const Vector3f_& x, const Vector3f_& y, const Vector3f_& z )
 {
-	return fromRotationMatrix( Matrix3f( x, y, z ) );
+	return fromRotationMatrix( Matrix3f_( x, y, z ) );
 }
 
 // static
-Quat4f Quat4f::randomRotation( float u0, float u1, float u2 )
+Quat4f_ Quat4f_::randomRotation( float u0, float u1, float u2 )
 {
 	float z = u0;
 	float theta = static_cast< float >( 2.f * M_PI * u1 );
 	float r = sqrt( 1.f - z * z );
 	float w = static_cast< float >( M_PI * u2 );
 
-	return Quat4f
+	return Quat4f_
 	(
 		cos( w ),
 		sin( w ) * cos( theta ) * r,
@@ -445,9 +445,9 @@ Quat4f Quat4f::randomRotation( float u0, float u1, float u2 )
 // Operators
 //////////////////////////////////////////////////////////////////////////
 
-Quat4f operator + ( const Quat4f& q0, const Quat4f& q1 )
+Quat4f_ operator + ( const Quat4f_& q0, const Quat4f_& q1 )
 {
-	return Quat4f
+	return Quat4f_
 	(
 		q0.w() + q1.w(),
 		q0.x() + q1.x(),
@@ -456,9 +456,9 @@ Quat4f operator + ( const Quat4f& q0, const Quat4f& q1 )
 	);
 }
 
-Quat4f operator - ( const Quat4f& q0, const Quat4f& q1 )
+Quat4f_ operator - ( const Quat4f_& q0, const Quat4f_& q1 )
 {
-	return Quat4f
+	return Quat4f_
 	(
 		q0.w() - q1.w(),
 		q0.x() - q1.x(),
@@ -467,9 +467,9 @@ Quat4f operator - ( const Quat4f& q0, const Quat4f& q1 )
 	);
 }
 
-Quat4f operator * ( const Quat4f& q0, const Quat4f& q1 )
+Quat4f_ operator * ( const Quat4f_& q0, const Quat4f_& q1 )
 {
-	return Quat4f
+	return Quat4f_
 	(
 		q0.w() * q1.w() - q0.x() * q1.x() - q0.y() * q1.y() - q0.z() * q1.z(),
 		q0.w() * q1.x() + q0.x() * q1.w() + q0.y() * q1.z() - q0.z() * q1.y(),
@@ -478,9 +478,9 @@ Quat4f operator * ( const Quat4f& q0, const Quat4f& q1 )
 	);
 }
 
-Quat4f operator * ( float f, const Quat4f& q )
+Quat4f_ operator * ( float f, const Quat4f_& q )
 {
-	return Quat4f
+	return Quat4f_
 	(
 		f * q.w(),
 		f * q.x(),
@@ -489,9 +489,9 @@ Quat4f operator * ( float f, const Quat4f& q )
 	);
 }
 
-Quat4f operator * ( const Quat4f& q, float f )
+Quat4f_ operator * ( const Quat4f_& q, float f )
 {
-	return Quat4f
+	return Quat4f_
 	(
 		f * q.w(),
 		f * q.x(),

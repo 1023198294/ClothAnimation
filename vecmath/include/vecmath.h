@@ -1,12 +1,12 @@
 #ifndef VECMATH_H
 #define VECMATH_H
 
-#include "Matrix2f.h"
-#include "Matrix3f.h"
-#include "Matrix4f.h"
-#include "Quat4f.h"
-#include "Vector2f.h"
-#include "Vector3f.h"
-#include "Vector4f.h"
+#include "Matrix2f_.h"
+#include "Matrix3f_.h"
+#include "Matrix4f_.h"
+#include "Quat4f_.h"
+#include "Vector2f_.h"
+#include "Vector3f_.h"
+#include "Vector4f_.h"
 
 #endif // VECMATH_H

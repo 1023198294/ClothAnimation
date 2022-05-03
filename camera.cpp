@@ -11,8 +11,8 @@ using namespace std;
 
 Camera::Camera()
 {
-    mStartRot = Matrix4f::identity();
-    mCurrentRot = Matrix4f::identity();
+    mStartRot = Matrix4f_::identity();
+    mCurrentRot = Matrix4f_::identity();
 }
 
 void Camera::SetDimensions(int w, int h)
@@ -35,12 +35,12 @@ void Camera::SetViewport(int x, int y, int w, int h)
     mPerspective[1] = float( w ) / h;
 }
 
-void Camera::SetCenter(const Vector3f& center)
+void Camera::SetCenter(const Vector3f_& center)
 {
     mStartCenter = mCurrentCenter = center;
 }
 
-void Camera::SetRotation(const Matrix4f& rotation)
+void Camera::SetRotation(const Matrix4f_& rotation)
 {
     mStartRot = mCurrentRot = rotation;
 }
@@ -159,12 +159,12 @@ void Camera::ArcBallRotation(int x, int y)
 
     if( dotprod != 1 )
     {
-        Vector3f axis( sy * ez - ey * sz, sz * ex - ez * sx, sx * ey - ex * sy );
+        Vector3f_ axis( sy * ez - ey * sz, sz * ex - ez * sx, sx * ey - ex * sy );
         axis.normalize();
         
         float angle = 2.0f * acos( dotprod );
 
-        mCurrentRot = Matrix4f::rotation( axis, angle );
+        mCurrentRot = Matrix4f_::rotation( axis, angle );
         mCurrentRot = mCurrentRot * mStartRot;
     }
     else
@@ -199,14 +199,14 @@ void Camera::PlaneTranslation(int x, int y)
     float sr = (sx - mViewport[2]/2.0f);
     float cr = (cx - mViewport[2]/2.0f);
 
-    Vector2f move(cr-sr, cu-su);
+    Vector2f_ move(cr-sr, cu-su);
 
     // this maps move
     move *= -mCurrentDistance/d;
 
     mCurrentCenter = mStartCenter +
-        + move[0] * Vector3f(mCurrentRot(0,0),mCurrentRot(0,1),mCurrentRot(0,2))
-        + move[1] * Vector3f(mCurrentRot(1,0),mCurrentRot(1,1),mCurrentRot(1,2));
+        + move[0] * Vector3f_(mCurrentRot(0,0),mCurrentRot(0,1),mCurrentRot(0,2))
+        + move[1] * Vector3f_(mCurrentRot(1,0),mCurrentRot(1,1),mCurrentRot(1,2));
 
 }
 
@@ -215,26 +215,26 @@ void Camera::ApplyViewport() const
     glViewport(mViewport[0],mViewport[1],mViewport[2],mViewport[3]);
 }
 
-Matrix4f Camera::projectionMatrix() const
+Matrix4f_ Camera::projectionMatrix() const
 {
-	return Matrix4f::perspectiveProjection
+	return Matrix4f_::perspectiveProjection
 	(
 		mPerspective[ 0 ] * M_PI / 180.f, mPerspective[ 1 ],
 		0.1f, 1000.f, false
 	);
 }
 
-Matrix4f Camera::viewMatrix() const
+Matrix4f_ Camera::viewMatrix() const
 {
 	// back up distance
-	Matrix4f lookAt = Matrix4f::lookAt
+	Matrix4f_ lookAt = Matrix4f_::lookAt
 	(
-		Vector3f( 0, 0, mCurrentDistance ),
-		Vector3f::ZERO,
-		Vector3f::UP
+		Vector3f_( 0, 0, mCurrentDistance ),
+		Vector3f_::ZERO,
+		Vector3f_::UP
 	);
     
-	return lookAt * mCurrentRot * Matrix4f::translation( -mCurrentCenter );
+	return lookAt * mCurrentRot * Matrix4f_::translation( -mCurrentCenter );
 
 	/*
     gluLookAt(0,0,mCurrentDistance,

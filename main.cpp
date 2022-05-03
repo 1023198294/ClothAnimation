@@ -116,9 +116,9 @@ namespace {
                 exit(0);
                 break;
             case ' ': {
-                Matrix4f eye = Matrix4f::identity();
+                Matrix4f_ eye = Matrix4f_::identity();
                 camera.SetRotation(eye);
-                camera.SetCenter(Vector3f::ZERO);
+                camera.SetCenter(Vector3f_::ZERO);
                 break;
             }
             case 'd': {
@@ -254,7 +254,7 @@ namespace {
         // keep yourself oriented.
         if (g_mousePressed) {
             glPushMatrix();
-            Vector3f eye = camera.GetCenter();
+            Vector3f_ eye = camera.GetCenter();
             glTranslatef(eye[0], eye[1], eye[2]);
 
             // Save current state of OpenGL
@@ -321,7 +321,7 @@ int main(int argc, char *argv[]) {
     camera.SetDimensions(600, 600);
 
     camera.SetDistance(10);
-    camera.SetCenter(Vector3f::ZERO);
+    camera.SetCenter(Vector3f_::ZERO);
 
     glutCreateWindow("Assignment 4");
 

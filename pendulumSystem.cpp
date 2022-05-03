@@ -26,9 +26,9 @@ PendulumSystem::PendulumSystem(int numParticles) : ParticleSystem(numParticles) 
 
 }
 
-void PendulumSystem::initPendulum(vector<Vector4f> myParticles,
-                                  vector<Vector4f> mySprings,
-                                  vector<Vector3f> myFaces) {
+void PendulumSystem::initPendulum(vector<Vector4f_> myParticles,
+                                  vector<Vector4f_> mySprings,
+                                  vector<Vector3f_> myFaces) {
     particles = myParticles;
     springs = mySprings;
     faces = myFaces;
@@ -38,7 +38,7 @@ void PendulumSystem::initPendulum(vector<Vector4f> myParticles,
 
         // for this system, we care about the position and the velocity
         m_vVecState.push_back(particles[i].xyz());
-        m_vVecState.push_back(Vector3f(0.0, 0.0, 0.0));
+        m_vVecState.push_back(Vector3f_(0.0, 0.0, 0.0));
     }
 
 }
@@ -46,17 +46,17 @@ void PendulumSystem::initPendulum(vector<Vector4f> myParticles,
 
 // TODO: implement evalF
 // for a given state, evaluate f(X,t)
-vector<Vector3f> PendulumSystem::evalF(vector<Vector3f> state) {
-    vector<Vector3f> f;
+vector<Vector3f_> PendulumSystem::evalF(vector<Vector3f_> state) {
+    vector<Vector3f_> f;
 
     for (unsigned int s = 0; s < state.size(); s++) {
 
-        Vector3f derivF_v = state[2 * s + 1];    // v = state (odd number)
+        Vector3f_ derivF_v = state[2 * s + 1];    // v = state (odd number)
         f.push_back(derivF_v);
 
-        Vector3f f_Gravity = Vector3f(0, mg, 0);    //Gravity
-        Vector3f f_Drag = -1 * vDrag * state[2 * s + 1];    //Drag
-        Vector3f f_Net = f_Gravity + f_Drag;    //Net Force
+        Vector3f_ f_Gravity = Vector3f_(0, mg, 0);    //Gravity
+        Vector3f_ f_Drag = -1 * vDrag * state[2 * s + 1];    //Drag
+        Vector3f_ f_Net = f_Gravity + f_Drag;    //Net Force
         f.push_back(f_Net);
     }
 
@@ -68,13 +68,13 @@ vector<Vector3f> PendulumSystem::evalF(vector<Vector3f> state) {
         int p0_Index = (int) springs[i][0];
         int p1_Index = (int) springs[i][1];
 
-        Vector3f p0 = state[2 * p0_Index];
-        Vector3f p1 = state[2 * p1_Index];
+        Vector3f_ p0 = state[2 * p0_Index];
+        Vector3f_ p1 = state[2 * p1_Index];
 
-        Vector3f p0_p1 = p0 - p1;
+        Vector3f_ p0_p1 = p0 - p1;
 
-        Vector3f f_Spring_p0 = -1 * springC * (p0_p1.abs() - restL) * (p0_p1 / (p0_p1.abs()));
-        Vector3f f_Spring_p1 = -1 * f_Spring_p0;
+        Vector3f_ f_Spring_p0 = -1 * springC * (p0_p1.abs() - restL) * (p0_p1 / (p0_p1.abs()));
+        Vector3f_ f_Spring_p1 = -1 * f_Spring_p0;
 
         f[2 * p0_Index + 1] += f_Spring_p0;
         f[2 * p1_Index + 1] += f_Spring_p1;
@@ -85,7 +85,7 @@ vector<Vector3f> PendulumSystem::evalF(vector<Vector3f> state) {
     if (wind) {
         for (int i = 0; i < m_numParticles; i++) {
             float fraction = float(rand()) / RAND_MAX;
-            f[2 * i + 1] += fraction * Vector3f(0.0f, 0.0f, 2.0f);
+            f[2 * i + 1] += fraction * Vector3f_(0.0f, 0.0f, 2.0f);
         }
     }
 
@@ -93,7 +93,7 @@ vector<Vector3f> PendulumSystem::evalF(vector<Vector3f> state) {
     //Make necessary particles fixed
     for (unsigned int k = 0; k < particles.size(); k++) {
         if (particles[k].w() == 1.0f) {
-            f[2 * k + 1] = Vector3f(0.0f, 0.0f, 0.0f);
+            f[2 * k + 1] = Vector3f_(0.0f, 0.0f, 0.0f);
         }
     }
 
@@ -103,7 +103,7 @@ vector<Vector3f> PendulumSystem::evalF(vector<Vector3f> state) {
         float moveVelocity = 1.5 * cos(convertRad(degree) * .5);
         for (unsigned int m = 0; m < particles.size(); m++) {
             if (particles[m].w() == 1.0f) {
-                f[2 * m] = Vector3f(0.0f, 0.0f, moveVelocity);
+                f[2 * m] = Vector3f_(0.0f, 0.0f, moveVelocity);
             }
         }
     }
@@ -118,7 +118,7 @@ void PendulumSystem::draw() {
     if (this->display_spring) {
         if (particles_ON) {
             for (int i = 0; i < m_numParticles; i++) {
-                Vector3f pos = getState()[2 * i];//  position of particle i.
+                Vector3f_ pos = getState()[2 * i];//  position of particle i.
                 glPushMatrix();
                 glTranslatef(pos[0], pos[1], pos[2]);
                 glutSolidSphere(0.075f, 10.0f, 10.0f);
@@ -128,8 +128,8 @@ void PendulumSystem::draw() {
 
         for (unsigned int a = 0; a < springs.size(); a++) {
             if (!structSprings_ON) {
-                Vector3f p0 = getState()[2 * (int) springs[a][0]];
-                Vector3f p1 = getState()[2 * (int) springs[a][1]];
+                Vector3f_ p0 = getState()[2 * (int) springs[a][0]];
+                Vector3f_ p1 = getState()[2 * (int) springs[a][1]];
                 glLineWidth(2.0f);
                 glBegin(GL_LINES);
                 glVertex3f(p0.x(), p0.y(), p0.z());
@@ -138,8 +138,8 @@ void PendulumSystem::draw() {
             } else {
                 float restL = 0.20f;
                 if (springs[a][2] == restL) {
-                    Vector3f p0 = getState()[2 * (int) springs[a][0]];
-                    Vector3f p1 = getState()[2 * (int) springs[a][1]];
+                    Vector3f_ p0 = getState()[2 * (int) springs[a][0]];
+                    Vector3f_ p1 = getState()[2 * (int) springs[a][1]];
                     glLineWidth(2.0f);
                     glBegin(GL_LINES);
                     glVertex3f(p0.x(), p0.y(), p0.z());
@@ -158,7 +158,7 @@ void PendulumSystem::draw() {
     glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
     glColor3f(1.0f, 1.0f, 0.0f);
-    Vector3f locBall = Vector3f(1.0f + xTrans, -3.5f + yTrans, 0.0f);
+    Vector3f_ locBall = Vector3f_(1.0f + xTrans, -3.5f + yTrans, 0.0f);
     float radBall = 1.0f;
     float epsilon = 0.125f;
     glPushMatrix();
@@ -178,11 +178,11 @@ void PendulumSystem::draw() {
 
 void PendulumSystem::drawClothes() {
     for (unsigned int f = 0; f < faces.size(); f++) {
-        Vector3f face = faces[f];
-        Vector3f v1 = getState()[2 * (int) face[0]];
-        Vector3f v2 = getState()[2 * (int) face[1]];
-        Vector3f v3 = getState()[2 * (int) face[2]];
-        Vector3f n = Vector3f::cross(v2 - v1, v3 - v1).normalized();
+        Vector3f_ face = faces[f];
+        Vector3f_ v1 = getState()[2 * (int) face[0]];
+        Vector3f_ v2 = getState()[2 * (int) face[1]];
+        Vector3f_ v3 = getState()[2 * (int) face[2]];
+        Vector3f_ n = Vector3f_::cross(v2 - v1, v3 - v1).normalized();
         glBegin(GL_TRIANGLES);
         glNormal3f(n[0], n[1], n[2]);
         glVertex3f(v1[0], v1[1], v1[2]);

@@ -37,17 +37,17 @@ public:
     // use these instead of 
     void ApplyViewport() const;
     
-	Matrix4f projectionMatrix() const;
-	Matrix4f viewMatrix() const;
+	Matrix4f_ projectionMatrix() const;
+	Matrix4f_ viewMatrix() const;
 
     // Set for relevant vars
-    void SetCenter(const Vector3f& center);
-    void SetRotation(const Matrix4f& rotation);
+    void SetCenter(const Vector3f_& center);
+    void SetRotation(const Matrix4f_& rotation);
     void SetDistance(const float distance);
 
     // Get for relevant vars
-    Vector3f GetCenter() const { return mCurrentCenter; }
-    Matrix4f GetRotation() const { return mCurrentRot; }
+    Vector3f_ GetCenter() const { return mCurrentCenter; }
+    Matrix4f_ GetRotation() const { return mCurrentRot; }
     float GetDistance() const { return mCurrentDistance; }
     
 private:
@@ -58,14 +58,14 @@ private:
     Button  mButtonState;
 
     // For rotation
-    Matrix4f mStartRot;
-    Matrix4f mCurrentRot;
+    Matrix4f_ mStartRot;
+    Matrix4f_ mCurrentRot;
 
     // For translation
     float   mPerspective[2];
     int     mViewport[4];
-    Vector3f mStartCenter;
-    Vector3f mCurrentCenter;
+    Vector3f_ mStartCenter;
+    Vector3f_ mCurrentCenter;
 
     // For zoom
     float   mStartDistance;

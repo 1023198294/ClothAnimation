@@ -49,7 +49,8 @@ void PendulumSystem::initPendulum(vector<Vector4f> myParticles,
 vector<Vector3f> PendulumSystem::evalF(vector<Vector3f> state) {
     vector<Vector3f> f;
 
-    for (unsigned int s = 0; s < state.size(); s++) {
+//    for (unsigned int s = 0; s < state.size()/2; s++) {
+    for (unsigned int s = 0; s < m_numParticles; s++) {
 
         Vector3f derivF_v = state[2 * s + 1];    // v = state (odd number)
         f.push_back(derivF_v);

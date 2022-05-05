@@ -173,7 +173,53 @@ vector<Vector3f_> ClothSystemWithImplicitSolver::evalF(vector<Vector3f_> state) 
         }
     }
 
+    //Implement Springs
+    for (unsigned int i = 0; i < springs.size(); i++) {
+        float restL = springs[i][2];
+        float springC = springs[i][3];
 
+        int p0_Index = (int) springs[i][0];
+        int p1_Index = (int) springs[i][1];
+
+        Vector3f_ p0 = state[2 * p0_Index];
+        Vector3f_ p1 = state[2 * p1_Index];
+
+        Vector3f_ p0_p1 = p0 - p1;
+
+        Vector3f_ f_Spring_p0 = -1 * springC * (p0_p1.abs() - restL) * (p0_p1 / (p0_p1.abs()));
+        Vector3f_ f_Spring_p1 = -1 * f_Spring_p0;
+
+        f[3 * p0_Index + 1] += f_Spring_p0;
+        f[3 * p1_Index + 1] += f_Spring_p1;
+    }
+
+    //Wind forces
+
+    if (wind) {
+        for (int i = 0; i < m_numParticles; i++) {
+            float fraction = float(rand()) / RAND_MAX;
+            f[3 * i + 1] += fraction * Vector3f_(0.0f, 0.0f, 2.0f);
+        }
+    }
+
+
+    //Make necessary particles fixed
+    for (unsigned int k = 0; k < particles.size(); k++) {
+        if (particles[k].w() == 1.0f) {
+            f[3 * k + 1] = Vector3f_(0.0f, 0.0f, 0.0f);
+        }
+    }
+
+    //Sinusoidal Movement
+    if (move) {
+        degree++;
+        float moveVelocity = 1.5 * cos(convertRad(degree) * .5);
+        for (unsigned int m = 0; m < particles.size(); m++) {
+            if (particles[m].w() == 1.0f) {
+                f[3 * m] = Vector3f_(0.0f, 0.0f, moveVelocity);
+            }
+        }
+    }
     return f;
 
 }

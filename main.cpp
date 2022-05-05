@@ -55,7 +55,7 @@ namespace {
     ///and switch between different timeSteppers
     void stepSystem() {
         ///TODO The stepsize should change according to commandline arguments
-        const float h = 0.02f;
+        const float h = 0.005f;
         if (timeStepper != 0) {
             timeStepper->takeStep(system, h);
         }
@@ -323,7 +323,7 @@ int main(int argc, char *argv[]) {
 
     camera.SetDimensions(600, 600);
 
-    camera.SetDistance(10);
+    camera.SetDistance(4);
     camera.SetCenter(Vector3f_::ZERO);
 
     glutCreateWindow("Assignment 4");

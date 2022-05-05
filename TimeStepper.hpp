@@ -4,6 +4,10 @@
 #include "vecmath.h"
 #include <vector>
 #include "particleSystem.h"
+#include "Condition.h"
+#include "CGSolver.h"
+#include <Eigen/Core>
+#include <Eigen/Dense>
 
 class TimeStepper {
 public:
@@ -34,6 +38,11 @@ class ode45 : public TimeStepper {
 private:
     float step_size;
     float tolerance;
+};
+
+
+class ImplicitSolver : public TimeStepper {
+    void takeStep(ParticleSystem *particleSystem, float stepSize);
 };
 
 #endif

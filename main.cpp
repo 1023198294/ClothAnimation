@@ -22,6 +22,7 @@
 #include "pendulumSystem.h"
 #include "ClothSystem.h"
 #include "ChainSystem.h"
+#include "ClothSystemWithImplicitSolver.h"
 
 using namespace std;
 
@@ -40,10 +41,12 @@ namespace {
         argcount = argc;
         argvalues = argv;
         srand(time(NULL));
-        system = new ClothSystem(15);
+        //system = new ClothSystem(15);
+        system = new ClothSystemWithImplicitSolver(5);
 //        system = new SimpleChain();
 //        timeStepper = new RK4();
-        timeStepper = new ode45();
+        //timeStepper = new ode45();
+        timeStepper = new ImplicitSolver();
     }
 
 

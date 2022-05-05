@@ -100,3 +100,59 @@ void ode45::takeStep(ParticleSystem *particleSystem, float stepSize) {
     }
     particleSystem->setState(x1);
 }
+
+Eigen::Vector3f vecmathVecToEigenVec(Vector3f_ vec){
+    Eigen::Vector3f v;
+    float x = vec[0];
+    float y = vec[1];
+    float z = vec[2];
+    v << x, y, z;
+    return v;
+}
+
+Vector3f_ eigenVecToVecmathVec(Eigen::Vector3f vec){
+    float x = vec(0);
+    float y = vec(1);
+    float z = vec(2);
+    Vector3f_ v(x, y, z);
+    return v;
+}
+
+void ImplicitSolver::takeStep(ParticleSystem *particleSystem, float stepSize){
+    vector<Vector3f_> state = particleSystem->getState(); // (pos, vel)
+    vector<Vector3f_> FVal = particleSystem->evalF(state); // (vel, F/M, fixed)
+    vector<Vector3f_> newState;
+
+    lhs = Eigen::MatrixXf::Zero(particleSystem->m_numParticles * 3, particleSystem->m_numParticles * 3);
+    rhs = Eigen::VectorXf::Zero(particleSystem->m_numParticles * 3);
+
+    Eigen::VectorXf vel = Eigen::VectorXf::Zero(particleSystem->m_numParticles * 3);
+    Eigen::VectorXf result = Eigen::VectorXf::Zero(particleSystem->m_numParticles * 3);
+    // Identity matrices
+    for(int i = 0; i < particleSystem->m_numParticles; i++){
+        lhs.block<3, 3>(i * 3, i * 3) = Eigen::Matrix3f::Identity(3, 3);
+        vel.segment<3>(i * 3) = vecmathVecToEigenVec(FVal[3 * i]);
+        // update forces
+        forces.segment<3>(i * 3) = vecmathVecToEigenVec(FVal[3 * i + 1]);
+    }
+
+    lhs = lhs - (stepSize * dfdv / 2.0f) - ((stepSize * stepSize / 2.0f)  * dfdx);
+    rhs = stepSize / 2.0f * (forces + stepSize * dfdx * vel);
+    result = lhs.inverse() * rhs;
+
+    for(int i = 0; i < particleSystem->m_numParticles; i++){
+        Vector3f_ newVel;
+        Vector3f_ newPos;
+        // fixed particle
+        if(FVal[i * 3 + 2].x() == 1.0f){
+            newVel = state[i * 2 + 1];
+            newPos = state[i * 2];
+        }
+        newVel = state[i * 2 + 1] + eigenVecToVecmathVec(result.segment<3>(i * 3));
+        newPos = state[i * 2] + newVel;
+        newState.push_back(newPos);
+        newState.push_back(newVel);
+    }
+
+    particleSystem->setState(newState);
+}

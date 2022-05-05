@@ -1,6 +1,6 @@
 #include "particleSystem.h"
 
-ParticleSystem::ParticleSystem(int nParticles) : wind(false), display_spring(true), move(false), velocity(-2.0f),
+ParticleSystem::ParticleSystem(int nParticles) : wind(false), display_spring(false), move(false), velocity(-2.0f),
                                                  distance(4.0), m_numParticles(nParticles) {
 
 }

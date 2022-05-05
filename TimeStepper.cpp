@@ -16,21 +16,26 @@ void ForwardEuler::takeStep(ParticleSystem *particleSystem, float stepSize) {
 }
 
 void Trapzoidal::takeStep(ParticleSystem *particleSystem, float stepSize) {
-    vector<Vector3f> x_current = particleSystem->getState();
-    vector<Vector3f> FVal_0 = particleSystem->evalF(x_current);
-    vector<Vector3f> FVal_1;
-    FVal_1.reserve(x_current.size());
-    vector<Vector3f> x_next_1;
-    x_next_1.reserve(x_current.size());
-    vector<Vector3f> x_next;
-    x_next.reserve(x_current.size());
-    for (int i = 0; i < FVal_0.size(); i++) {
-        x_next_1.push_back(x_current[i] + stepSize * FVal_0[0]);
+    vector<Vector3f> newX;
+
+    vector<Vector3f> currentX = particleSystem->getState();
+
+    vector<Vector3f> f_0 = particleSystem->evalF(currentX);
+    vector<Vector3f> f_1_x;
+
+    for (int x=0; x<f_0.size(); x++){
+        Vector3f X_each = currentX[x] + (f_0[x]*stepSize);
+        f_1_x.push_back(X_each);
     }
-    for (int i = 0; i < x_next_1.size(); i++) {
-        FVal_1.push_back(x_current[i] + stepSize * (FVal_0[i] + FVal_1[i]) / 2.0);
+
+    vector<Vector3f> f_1 = particleSystem->evalF(f_1_x);
+
+    for (int i=0; i<currentX.size(); i++){
+        Vector3f eachX = currentX[i] + ((f_0[i] + f_1[i])*(stepSize/2.0));
+        newX.push_back(eachX);
     }
-    particleSystem->setState(FVal_1);
+
+    particleSystem->setState(newX);
 }
 
 vector<Vector3f> RK4_step(ParticleSystem *particleSystem, float stepSize) {

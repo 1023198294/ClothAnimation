@@ -42,8 +42,11 @@ namespace {
         srand(time(NULL));
         system = new ClothSystem(15);
 //        system = new SimpleChain();
-//        timeStepper = new RK4();
-        timeStepper = new ode45();
+//        system = new SimpleChain();
+//        timeStepper = new ForwardEuler();
+//        timeStepper = new Trapzoidal();
+        timeStepper = new RK4();
+//        timeStepper = new ode45();
     }
 
 

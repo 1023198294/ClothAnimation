@@ -135,7 +135,7 @@ void ClothSystem::draw() {
 
     //Faces
     if (!this->display_spring) {
-        drawClothes();
+        drawClothes2();
     }
     //Ball for Cloth
     glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
@@ -154,6 +154,22 @@ void ClothSystem::draw() {
             m_vVecState[2 * n] = (locBall +
                                   (radBall + epsilon) * (m_vVecState[2 * n] - locBall).normalized());
         }
+    }
+}
+
+void ClothSystem::drawClothes2() {
+    for (unsigned int f = 0; f < faces.size(); f++) {
+        Vector3f face = faces[f];
+        Vector3f v1 = getState()[2 * (int) face[0]];
+        Vector3f v2 = getState()[2 * (int) face[1]];
+        Vector3f v3 = getState()[2 * (int) face[2]];
+        Vector3f n = Vector3f::cross(v2 - v1, v3 - v1).normalized();
+        glBegin(GL_TRIANGLES);
+        glNormal3f(n[0], n[1], n[2]);
+        glVertex3f(v1[0], v1[1], v1[2]);
+        glVertex3f(v2[0], v2[1], v2[2]);
+        glVertex3f(v3[0], v3[1], v3[2]);
+        glEnd();
     }
 }
 

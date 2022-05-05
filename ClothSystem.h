@@ -13,6 +13,7 @@ public:
     ClothSystem(int C_SIZE);
 
     void drawClothes();
+    void drawClothes2();
 
     void draw();
 
